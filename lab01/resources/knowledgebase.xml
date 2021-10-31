@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knowledgebase>
+    <rules>
+        <rule type="And">
+            <antecedents>
+                <antecedent name="a" />
+                <antecedent name="b" />
+                <antecedent name="c" />
+            </antecedents>
+            <consequent name="d" />
+        </rule>
+        <rule type="Or">
+            <antecedents>
+                <antecedent name="e" />
+                <antecedent name="f" />
+            </antecedents>
+            <consequent name="g" />
+        </rule>
+        <rule type="And">
+            <antecedents>
+                <antecedent name="d" />
+                <antecedent name="g" />
+            </antecedents>
+            <consequent name="h" />
+        </rule>
+    </rules>
+</knowledgebase>
