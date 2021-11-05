@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knowledgebase>
+<system>
     <rules>
-        <rule type="And">
+        <rule>
             <antecedents>
                 <antecedent name="a" />
                 <antecedent name="b" />
@@ -9,14 +9,19 @@
             </antecedents>
             <consequent name="d" />
         </rule>
-        <rule type="Or">
+        <rule>
             <antecedents>
                 <antecedent name="e" />
+            </antecedents>
+            <consequent name="g" />
+        </rule>
+        <rule>
+            <antecedents>
                 <antecedent name="f" />
             </antecedents>
             <consequent name="g" />
         </rule>
-        <rule type="And">
+        <rule>
             <antecedents>
                 <antecedent name="d" />
                 <antecedent name="g" />
@@ -24,4 +29,4 @@
             <consequent name="h" />
         </rule>
     </rules>
-</knowledgebase>
+</system>
