@@ -9,24 +9,23 @@ import com.qwerfah.search.data._
 
 class Parser(filename: String):
 
-  val knowledgebase: xml.Elem =
+  val system: xml.Elem =
     xml.XML.loadFile((new File(".")).getAbsolutePath + "/resources/" + filename)
 
-  private def parseAntecedents(ruleNode: xml.Node): Seq[Antecedent] =
+  private def parseAntecedents(ruleNode: xml.Node): Set[Term] =
     (ruleNode \ "antecedents" \ "antecedent").map { node =>
-      Antecedent((node \ "@name").text)
-    }
+      Term((node \ "@name").text)
+    }.toSet
 
-  private def parseConsequent(ruleNode: xml.Node): Consequent = Consequent(
+  private def parseConsequent(ruleNode: xml.Node) = Term(
     (ruleNode \ "consequent" \ "@name").text
   )
 
-  private def parseRule(ruleNode: xml.Node): Rule = Rule(
+  private def parseRule(ruleNode: xml.Node) = Rule(
     parseAntecedents(ruleNode),
-    parseConsequent(ruleNode),
-    RuleType.valueOf((ruleNode \ "@type").text)
+    parseConsequent(ruleNode)
   )
 
-  def parse(): KnowledgeBase = KnowledgeBase(
-    (knowledgebase \ "rules" \ "rule") map { parseRule(_) }
+  def parse = ProductionSystem(
+    (system \ "rules" \ "rule").map(parseRule _).toSet
   )
