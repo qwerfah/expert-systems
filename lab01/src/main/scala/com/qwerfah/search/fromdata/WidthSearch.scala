@@ -1,56 +1,41 @@
 package com.qwerfah.search.fromdata
 
-import scala.collection.immutable.Queue
+import scala.collection.mutable.Queue
 
 import com.qwerfah.search.data._
 
-/** Width search implementation for and-or graph. And-or graph represented by
-  * [[KnowledgeBase]] instance.
-  * @param base
-  *   And-or graph representation.
+/** Width search implementation for deduction process in a and-or graph. And-or
+  * graph is a formal representation of the solution space of some task.
+  * Deduction process organizes using [[ProductionSystem]] instance data. And-or
+  * graph produced during deduction process is subgraph of solution space of
+  * initial task and represents the process of solving specified with
+  * [[SearchData]] task.
+  * @param system
+  *   Production system instance.
   */
-class WidthSearch(private val base: KnowledgeBase):
-  private var queue: Queue[Term] = Queue()
+class WidthSearch(private val system: ProductionSystem):
+  private val queue: Queue[State] = Queue()
 
-  /** Perform single step of search algorithm.
-    * @return
-    *   Collection pair: collection of new terms to enqueue and collection of
-    *   terms to dequeue (head and some other terms in case of and-rule match).
+  /** Get set of successors in and-or graph for specified deduction state.
+    * @param state
+    *   State to get successors for.
     */
-  private def step: (Seq[Term], Set[Term]) =
-    val term = queue.head
+  def getSuccessors(state: State) = system.rules.collect {
+    case r if r.isApplicable(state) => r.apply(state)
+  }
 
-    /** Check if or-rule matches with current queue head. */
-    def isOrRuleMatches(rule: Rule) =
-      (rule.antecedents.length == 1 || rule.ruleType == RuleType.Or) && rule.antecedents
-        .contains(term)
-
-    /** Check if and-rule matches with current queue content (not only head if
-      * rule contains more that one antecedent).
-      */
-    def isAndRuleMatches(rule: Rule) =
-      rule.ruleType == RuleType.And && rule.antecedents.toSet.subsetOf(
-        queue.toSet
-      )
-
-    /** Check if arbitrary rule is applicable to current queue state. */
-    def isApplicable = (rule: Rule) =>
-      isOrRuleMatches(rule) || isAndRuleMatches(rule)
-
-    val applicable = base.rules filter isApplicable
-
-    (
-      applicable map { rule => rule.consequent },
-      applicable.map(_.antecedents).flatten.toSet[Term]
-    )
-
+  /** Search the decision of specified task using with search in and-or graph.
+    * @param data
+    *   Task condition and result of solving.
+    */
   def search(data: SearchData): Boolean =
-    def isAllowed(target: Seq[Term]) = target.toSet.subsetOf(queue.toSet)
+    queue.clear()
+    queue.enqueue(data.initial)
 
-    queue = Queue().enqueueAll(data.data)
+    while queue.nonEmpty do
+      val state = queue.dequeue()
+      if (state.subsetOf(data.target)) return true
+      val successors = getSuccessors(state)
+      queue.enqueueAll(successors)
 
-    while queue.nonEmpty && !isAllowed(data.target) do
-      val result = step
-      queue = queue.dropWhile(result._2.contains(_)).enqueueAll(result._1)
-
-    true
+    false
