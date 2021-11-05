@@ -28,14 +28,23 @@ class WidthSearch(private val system: ProductionSystem):
     * @param data
     *   Task condition and result of solving.
     */
-  def search(data: SearchData): Boolean =
+  def search(data: SearchData): Option[StateGraph] =
     queue.clear()
     queue.enqueue(data.initial)
+    var visited = collection.mutable.Set[State]()
+    var graph = StateGraph(data.initial)
 
     while queue.nonEmpty do
       val state = queue.dequeue()
-      if (state.subsetOf(data.target)) return true
-      val successors = getSuccessors(state)
-      queue.enqueueAll(successors)
+      if (data.target.subsetOf(state)) return Some(graph)
 
-    false
+      visited.add(state)
+
+      val successors = getSuccessors(state)
+      val notVisited = successors.filterNot(visited.contains _)
+
+      queue.enqueueAll(notVisited)
+      visited.addAll(notVisited)
+      notVisited.map(graph.add(_, state))
+
+    None
