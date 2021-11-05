@@ -46,7 +46,15 @@ final case class ProductionSystem(rules: Set[Rule]):
   *   Set of terms which represent current deduction state.
   */
 final case class State(terms: Set[Term]):
+  require(terms.size > 0)
+
   def subsetOf(other: State) = terms.subsetOf(other.terms)
+
+  override def equals(other: Any): Boolean = other match
+    case state: State => terms.equals(state.terms)
+    case _            => false
+
+  override def toString = terms.map(_.name).mkString(", ")
 
 /** Data to organize deduction process. Specify condition and result of solving
   * some task.
