@@ -25,6 +25,13 @@ final case class Rule(
     */
   def isApplicable(state: State) = antecedents.subsetOf(state.terms)
 
+  /** Check if current rule can be unapplied i.e. if its consequent contains in
+    * given state.
+    * @param state
+    *   Deduction state to check unappliance to.
+    */
+  def isUnapplicable(state: State) = state.terms.contains(consequent)
+
   /** Apply current rule to the specified state and produce new state as the
     * result of appliance.
     * @param state
@@ -33,6 +40,13 @@ final case class Rule(
     *   New state - the result of rule appliance.
     */
   def apply(state: State) = State(state.terms.diff(antecedents) + consequent)
+
+  /** Apply current rule in reverse order i.e. replace its consequent in given
+    * state by its antecedents.
+    * @param state
+    *   Deduction state to unapply rule to.
+    */
+  def unapply(state: State) = State(state.terms - consequent ++ antecedents)
 
 /** Production system with set of production rules.
   * @param rules
