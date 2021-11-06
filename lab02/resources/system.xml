@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system>
+    <rules>
+        <rule>
+            <antecedents>
+                <antecedent name="a" />
+                <antecedent name="b" />
+                <antecedent name="c" />
+            </antecedents>
+            <consequent name="d" />
+        </rule>
+        <rule>
+            <antecedents>
+                <antecedent name="e" />
+            </antecedents>
+            <consequent name="g" />
+        </rule>
+        <rule>
+            <antecedents>
+                <antecedent name="f" />
+            </antecedents>
+            <consequent name="g" />
+        </rule>
+        <rule>
+            <antecedents>
+                <antecedent name="d" />
+                <antecedent name="g" />
+            </antecedents>
+            <consequent name="h" />
+        </rule>
+    </rules>
+</system>
