@@ -30,8 +30,6 @@ def loop(system: ProductionSystem) =
     val searchData =
       SearchData(State(initialTerms.toSet), State(targetTerms.toSet))
 
-    println(searchData)
-
     search.search(searchData) match
       case Some(graph) =>
         println("\nTarget state is reachable\n")

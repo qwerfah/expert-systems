@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system>
+    <rules>
+        <rule>
+            <antecedents>
+                <antecedent name="a" />
+                <antecedent name="b" />
+            </antecedents>
+            <consequent name="c" />
+        </rule>
+        <rule>
+            <antecedents>
+                <antecedent name="d" />
+            </antecedents>
+            <consequent name="e" />
+        </rule>
+    </rules>
+</system>
