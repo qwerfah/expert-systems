@@ -31,6 +31,7 @@ class DepthSearch(private val system: ProductionSystem):
   def search(data: SearchData): Option[StateGraph] =
     stack.clear()
     stack.push(data.target)
+    
     var visited = collection.mutable.Set[State]()
     var graph = StateGraph(data.target)
 
