@@ -1,68 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <system>
     <rules>
         <rule>
             <antecedents>
-                <antecedent name="intention_rest" />
-                <antecedent name="road_bumpy" />
+                <antecedent name="a" />
+                <antecedent name="b" />
+                <antecedent name="c" />
             </antecedents>
-            <consequent name="use_jeep" />
+            <consequent name="d" />
         </rule>
         <rule>
             <antecedents>
-                <antecedent name="place_mountains" />
+                <antecedent name="e" />
             </antecedents>
-            <consequent name="road_bumpy" />
+            <consequent name="g" />
         </rule>
         <rule>
             <antecedents>
-                <antecedent name="intention_sleep" />
+                <antecedent name="f" />
             </antecedents>
-            <consequent name="use_bed" />
+            <consequent name="g" />
         </rule>
         <rule>
             <antecedents>
-                <antecedent name="intention_rest" />
-                <antecedent name="place_far" />
+                <antecedent name="d" />
+                <antecedent name="g" />
             </antecedents>
-            <consequent name="use_plain" />
-        </rule>
-         <rule>
-            <antecedents>
-                <antecedent name="intention_work" />
-                <antecedent name="working_day" />
-            </antecedents>
-            <consequent name="place_office" />
-        </rule>
-        <rule>
-            <antecedents>
-                <antecedent name="place_office" />
-            </antecedents>
-            <consequent name="working_day" />
-        </rule>
-        <rule>
-            <antecedents>
-                <antecedent name="intention_rest" />
-            </antecedents>
-            <consequent name="use_plain" />
-        </rule>
-        <rule>
-            <antecedents>
-                <antecedent name="place_far" />
-            </antecedents>
-            <consequent name="use_train" />
-        </rule>
-        <rule>
-            <antecedents>
-                <antecedent name="use_train" />
-            </antecedents>
-            <consequent name="buy_ticket" />
-        </rule>
-        <rule>
-            <antecedents>
-                <antecedent name="use_plain" />
-            </antecedents>
-            <consequent name="buy_ticket" />
+            <consequent name="h" />
         </rule>
     </rules>
 </system>
