@@ -54,7 +54,7 @@ final case class State(terms: Set[Term]):
     case state: State => terms.equals(state.terms)
     case _            => false
 
-  override def toString = terms.map(_.name).mkString(", ")
+  override def toString = s"(${terms.map(_.name).mkString(", ")})"
 
 /** Data to organize deduction process. Specify condition and result of solving
   * some task.
