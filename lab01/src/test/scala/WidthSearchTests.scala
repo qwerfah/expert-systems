@@ -3,15 +3,15 @@ import org.junit.Assert.*
 
 import com.qwerfah.search.data._
 import com.qwerfah.search.xml.Parser
-import com.qwerfah.search.fromdata.WidthSearch
+import com.qwerfah.search.fromdata.BreadthSearch
 
 class WidthSearchTests:
   var system: ProductionSystem = _
-  var search: WidthSearch = _
+  var search: BreadthSearch = _
 
   @Before def initialize() =
     system = Parser("system.xml").parse.get
-    search = WidthSearch(system)
+    search = BreadthSearch(system)
 
   @Test def widthSearchTest1(): Unit =
     val initial = State(Set(Term("a")))
