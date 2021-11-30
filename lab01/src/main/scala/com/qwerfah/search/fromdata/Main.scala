@@ -35,7 +35,7 @@ def loop(system: ProductionSystem) =
     search.search(searchData) match
       case Some(graph) =>
         println("\nTarget state is reachable\n")
-        Serializer(graph).serialize("graph.dot") match
+      Serializer(graph).serialize("graph.dot", searchData) match
           case Success(_) => println("\nDecision graph saved\n")
           case Failure(e) =>
             println(s"\nUnable to save graph: ${e.getMessage}\n")
