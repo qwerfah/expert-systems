@@ -2,37 +2,36 @@ package com.qwerfah.search.dot
 
 import scala.util.{Try, Success, Failure}
 
-import java.io.File
+import java.io.{File, FileWriter}
 
-import com.qwerfah.search.data.StateGraph
-import java.io.FileWriter
-import com.qwerfah.search.data.SearchData
+import com.qwerfah.search.data.{SearchData, Rule, Term}
 
-class Serializer(graph: StateGraph):
+trait Serializer:
+  def serialize(filename: String, rules: Seq[Rule], data: SearchData): Try[Unit]
+
+object ToDotFileSerializer extends Serializer:
   private def createWriter(filename: String): Try[FileWriter] =
     Try { new FileWriter(new File(filename)) }
 
-  private def serialize(writer: FileWriter, data: SearchData): Try[Unit] =
-    def serialize(graph: StateGraph): Unit =
-      val fillcolor =
-        if graph.state == data.initial then "\"green\""
-        else if graph.state == data.target then "\"red\""
-        else "\"white\""
-      writer.write(s"\"${graph.state}\" [style=filled fillcolor=$fillcolor]\n")
-      graph.subgraphs.getOrElse(Seq[StateGraph]()) foreach { g =>
-        writer.write(s"\"${graph.state}\" -> \"${g.state}\"\n")
-        serialize(g)
-      }
+  private def serialize(writer: FileWriter, rules: Seq[Rule], data: SearchData): Try[Unit] =
+    def defineFillcolor(term: Term): String =
+      if data.initial.terms.contains(term) then "\"green\""
+      else if data.target.terms.contains(term) then "\"red\""
+      else "\"white\""
 
     Try {
       writer.write("digraph G {\n")
-      serialize(graph)
+
+      if data.target isSubstateOf data.initial then
+        writer.write(s"\"${data.target}\" [style=filled fillcolor=red]\n")
+      else for rule <- rules do writer.write(s"$rule\n")
+
       writer.write("}")
       writer.close()
     }
 
-  def serialize(filename: String, data: SearchData): Try[Unit] =
+  override def serialize(filename: String, rules: Seq[Rule], data: SearchData): Try[Unit] =
     for
       writer <- createWriter(filename)
-      result <- serialize(writer, data)
+      result <- serialize(writer, rules, data)
     yield result
