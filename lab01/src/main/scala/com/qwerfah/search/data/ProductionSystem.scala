@@ -4,8 +4,8 @@ package com.qwerfah.search.data
   * @param name
   *   Term symbolic name.
   */
-final case class Term(name: String):
-  require(name.nonEmpty)
+final case class Term(name: String) extends AnyVal:
+  override def toString = s"\"$name\""
 
 /** Single production rule of production system.
   * @param antecedents
@@ -14,7 +14,7 @@ final case class Term(name: String):
   *   Consequent - rule appliance result.
   */
 final case class Rule(
-    antecedents: Set[Term],
+    antecedents: Seq[Term],
     consequent: Term
 ):
   require(antecedents.size > 0)
@@ -23,32 +23,34 @@ final case class Rule(
     * @param state
     *   Deduction state to check appliance to.
     */
-  def isApplicable(state: State) = antecedents.subsetOf(state.terms)
+  def isApplicable(state: State) = antecedents.forall(state.terms.contains(_))
 
-  /** Apply current rule to the specified state and produce new state as the
-    * result of appliance.
+  /** Apply current rule to the specified state and produce new state as the result of appliance.
     * @param state
     *   Deduction state to apply rule to.
     * @return
     *   New state - the result of rule appliance.
     */
-  def apply(state: State) = State(state.terms.diff(antecedents) + consequent)
+  def apply(state: State) = State(state.terms :+ consequent, true)
+
+  override def toString: String = s"{ ${antecedents
+    .mkString(" ")} } -> $consequent ${if antecedents.length > 1 then "[color=red]" else ""}"
 
 /** Production system with set of production rules.
   * @param rules
   *   Set of production system rules.
   */
-final case class ProductionSystem(rules: Set[Rule]):
+final case class ProductionSystem(rules: Seq[Rule]):
   require(rules.size > 0)
 
 /** State of the deduction process.
   * @param terms
   *   Set of terms which represent current deduction state.
   */
-final case class State(terms: Set[Term]):
+final case class State(terms: Seq[Term], mutated: Boolean = false, target: Boolean = false):
   require(terms.size > 0)
 
-  def subsetOf(other: State) = terms.subsetOf(other.terms)
+  def isSubstateOf(other: State): Boolean = terms.forall(other.terms.contains(_))
 
   override def equals(other: Any): Boolean = other match
     case state: State => terms.equals(state.terms)
@@ -56,8 +58,7 @@ final case class State(terms: Set[Term]):
 
   override def toString = s"(${terms.map(_.name).mkString(", ")})"
 
-/** Data to organize deduction process. Specify condition and result of solving
-  * some task.
+/** Data to organize deduction process. Specify condition and result of solving some task.
   * @param initial
   *   Initial state - set of terms from which deduction process starts.
   * @param target
