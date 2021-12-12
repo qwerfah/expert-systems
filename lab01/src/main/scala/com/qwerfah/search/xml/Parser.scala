@@ -18,11 +18,11 @@ class Parser(filename: String):
       )
     }
 
-  private def parseAntecedents(ruleNode: xml.Node): Try[Set[Term]] =
+  private def parseAntecedents(ruleNode: xml.Node): Try[Seq[Term]] =
     Try {
       (ruleNode \ "antecedents" \ "antecedent").map { node =>
         Term((node \ "@name").text)
-      }.toSet
+      }
     }
 
   private def parseConsequent(ruleNode: xml.Node): Try[Term] =
@@ -36,4 +36,4 @@ class Parser(filename: String):
   def parse: Try[ProductionSystem] = for
     system <- openXmlFile
     rules <- (system \ "rules" \ "rule").map(parseRule _).sequence
-  yield ProductionSystem(rules.toSet)
+  yield ProductionSystem(rules)
