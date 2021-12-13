@@ -1,15 +1,20 @@
 package com.qwerfah.unification
 
-trait Term {
+trait Term:
     val name: String
-}
+    
+    def contains(other: Term): Boolean
 
-case class PredicateSymbol() extends Term
+trait Atom extends Term:
+    override def contains(other: Term): Boolean = this == other
 
-case class FunctionalSymbol() extends Term
+case class PredicateSymbol(override val name: String) extends Atom
 
-case class Constant() extends Term
+case class FunctionalSymbol(override val name: String) extends Atom
 
-case class Variable() extends Term
+case class Constant(override val name: String) extends Atom
 
-case class 
+case class Variable(override val name: String) extends Atom
+
+case class Expression(override val name: String, terms: Term*) extends Term:
+    override def contains(other: Term): Boolean = terms.contains(other)
