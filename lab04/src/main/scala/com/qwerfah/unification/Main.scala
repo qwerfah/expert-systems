@@ -1,7 +1,18 @@
 package com.qwerfah.unification
 
-@main def hello: Unit = 
-  println("Hello world!")
-  println(msg)
+@main def main: Unit =
+  val un1 = SeqUnificator(
+    Substitution(
+      Expression("g(x, y)", FunctionalSymbol("g"), Variable("x"), Variable("y")) -> Variable("z")
+    )
+  )
 
-def msg = "I was compiled by Scala 3. :)"
+  val un2 = SeqUnificator(
+    Substitution(Constant("A") -> Variable("x")),
+    Substitution(Constant("B") -> Variable("y")),
+    Substitution(Constant("C") -> Variable("w")),
+    Substitution(Constant("D") -> Variable("z"))
+  )
+
+  val un = un1 compose un2
+  println(un)
