@@ -33,3 +33,8 @@ jobs:
       run: |
         cd ./lab03
         sbt test
+        
+    - name: Run tests for lab04
+      run: |
+        cd ./lab04
+        sbt test
