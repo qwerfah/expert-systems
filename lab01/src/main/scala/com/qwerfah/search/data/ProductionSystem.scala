@@ -14,6 +14,7 @@ final case class Term(name: String) extends AnyVal:
   *   Consequent - rule appliance result.
   */
 final case class Rule(
+    name: String,
     antecedents: Seq[Term],
     consequent: Term
 ):
@@ -34,7 +35,8 @@ final case class Rule(
   def apply(state: State) = State(state.terms :+ consequent, true)
 
   override def toString: String = s"{ ${antecedents
-    .mkString(" ")} } -> $consequent ${if antecedents.length > 1 then "[color=red]" else ""}"
+    .mkString(" ")} } -> $consequent ${if antecedents.length > 1 then s"[color=red, label=$name]"
+  else s"[label=$name]"}"
 
 /** Production system with set of production rules.
   * @param rules

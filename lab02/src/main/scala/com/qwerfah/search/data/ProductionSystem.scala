@@ -14,23 +14,24 @@ final case class Term(name: String):
   *   Consequent - rule appliance result.
   */
 final case class Rule(
-    antecedents: Set[Term],
-    consequent: Term
+    start: State,
+    end: State
 ):
-  require(antecedents.size > 0)
+  require(start.terms.nonEmpty)
+  require(end.terms.nonEmpty)
 
   /** Check if current rule is appliable to the specified deduction state.
     * @param state
     *   Deduction state to check appliance to.
     */
-  def isApplicable(state: State) = antecedents.subsetOf(state.terms)
+  def isApplicable(state: State) = start.terms.subsetOf(state.terms)
 
   /** Check if current rule can be unapplied i.e. if its consequent contains in
     * given state.
     * @param state
     *   Deduction state to check unappliance to.
     */
-  def isUnapplicable(state: State) = state.terms.contains(consequent)
+  def isUnapplicable(state: State) = state.terms == end.terms
 
   /** Apply current rule to the specified state and produce new state as the
     * result of appliance.
@@ -39,14 +40,14 @@ final case class Rule(
     * @return
     *   New state - the result of rule appliance.
     */
-  def apply(state: State) = State(state.terms.diff(antecedents) + consequent)
+  def apply(state: State) = State(state.terms.diff(start.terms) ++ end.terms)
 
   /** Apply current rule in reverse order i.e. replace its consequent in given
     * state by its antecedents.
     * @param state
     *   Deduction state to unapply rule to.
     */
-  def unapply(state: State) = State(state.terms - consequent ++ antecedents)
+  def unapply(state: State) = State(start.terms)
 
 /** Production system with set of production rules.
   * @param rules
@@ -59,8 +60,9 @@ final case class ProductionSystem(rules: Set[Rule]):
   * @param terms
   *   Set of terms which represent current deduction state.
   */
-final case class State(terms: Set[Term]):
+final case class State(terms: Set[Term], depth: Int = 0, mark: Boolean = false):
   require(terms.size > 0)
+  require(depth >= 0)
 
   def subsetOf(other: State) = terms.subsetOf(other.terms)
 

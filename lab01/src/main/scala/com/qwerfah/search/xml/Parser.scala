@@ -31,7 +31,7 @@ class Parser(filename: String):
   private def parseRule(ruleNode: xml.Node): Try[Rule] = for
     antecedents <- parseAntecedents(ruleNode)
     consequent <- parseConsequent(ruleNode)
-  yield Rule(antecedents, consequent)
+  yield Rule((ruleNode \ "@name").text, antecedents, consequent)
 
   def parse: Try[ProductionSystem] = for
     system <- openXmlFile
