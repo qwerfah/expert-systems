@@ -2,7 +2,7 @@ package com.qwerfah.unification
 
 case class Substitution(raw: (Term, Variable)):
   def t1: Term = raw._1
-  def t2: Term = raw._2
+  def t2: Variable = raw._2
 
   override def equals(obj: Any): Boolean = obj match
     case Substitution(raw) => this.raw == raw
