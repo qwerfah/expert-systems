@@ -1,13 +1,17 @@
 package com.qwerfah.unification
 
 case class Substitution(raw: (Term, Variable)):
-  def t1 = raw._1
-  def t2 = raw._2
+  def t1: Term = raw._1
+  def t2: Term = raw._2
+
+  override def equals(obj: Any): Boolean = obj match
+    case Substitution(raw) => this.raw == raw
+    case _                 => false
 
   def apply(term: Term): Term = term match
     case Variable(_) if term == raw._2 => raw._1
     case Expression(_, terms*) =>
-      val applied = terms.map(apply(_))
+      val applied = terms.map(apply)
       Expression(applied.mkString, applied: _*)
     case _ => term
 
@@ -21,10 +25,10 @@ trait Unificator:
   */
 case class SeqUnificator(substitutions: Substitution*) extends Unificator:
   override def apply(terms: Seq[Term]): Term =
-    substitutions.foldRight(terms)((sub, terms) => terms.map(sub.apply(_))) match
-      case term :: Nil => term
-      case Nil         => throw new Exception
-      case terms       => Expression(terms.mkString, terms: _*)
+    substitutions.foldRight(terms)((sub, terms) => terms.map(sub.apply)) match
+      case Seq(terms*) =>
+        if terms.length == 1 then terms.head else Expression(terms.mkString, terms: _*)
+      case _ => throw new Exception("empty expression")
 
   override def compose(other: Unificator): Unificator = other match
     case EmptyUnificator => this
@@ -32,17 +36,18 @@ case class SeqUnificator(substitutions: Substitution*) extends Unificator:
       val oldApplied =
         substitutions.map(sub => Substitution(un.apply(sub.t1 :: Nil) -> sub.t2))
       val newUnique =
-        otherSubstitutions.filter(sub1 => substitutions.find(sub2 => sub1.t2 == sub2.t2).isEmpty)
+        otherSubstitutions.filter(sub1 => !substitutions.exists(sub2 => sub1.t2 == sub2.t2))
       SeqUnificator(oldApplied ++ newUnique: _*)
 
   override def toString =
-    s"{ ${substitutions.map(sub => s"${sub.t1} / ${sub.t2}").mkString(", ")} }"
+    s"{ ${substitutions.map(sub => s"${sub.t1}/${sub.t2}").mkString(", ")} }"
 
 /** Represent empty unificator with no substitutions. */
 case object EmptyUnificator extends Unificator:
   override def apply(terms: Seq[Term]): Term = terms match
-    case term :: Nil => term
-    case _           => Expression(terms.mkString, terms: _*)
+    case Seq(terms*) =>
+      if terms.length == 1 then terms.head else Expression(terms.mkString, terms: _*)
+    case _ => throw new Exception("empty expression")
 
   override def compose(other: Unificator): Unificator = other
 
