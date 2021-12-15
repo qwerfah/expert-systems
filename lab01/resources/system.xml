@@ -1,68 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system>
     <rules>
-        <rule>
+        <rule name="101">
             <antecedents>
-                <antecedent name="intention_rest" />
-                <antecedent name="road_bumpy" />
+                <antecedent name="1" />
+                <antecedent name="2" />
             </antecedents>
-            <consequent name="use_jeep" />
+            <consequent name="3" />
         </rule>
-        <rule>
+        <rule name="104">
             <antecedents>
-                <antecedent name="place_mountains" />
+                <antecedent name="8" />
             </antecedents>
-            <consequent name="road_bumpy" />
+            <consequent name="3" />
         </rule>
-        <rule>
+        <rule name="103">
             <antecedents>
-                <antecedent name="intention_sleep" />
+                <antecedent name="5" />
+                <antecedent name="6" />
             </antecedents>
-            <consequent name="use_bed" />
+            <consequent name="4" />
         </rule>
-        <rule>
+        <rule name="107">
             <antecedents>
-                <antecedent name="intention_rest" />
-                <antecedent name="place_far" />
+                <antecedent name="12" />
+                <antecedent name="13" />
             </antecedents>
-            <consequent name="use_plain" />
+            <consequent name="11" />
         </rule>
-         <rule>
+         <rule name="115">
             <antecedents>
-                <antecedent name="intention_work" />
-                <antecedent name="working_day" />
+                <antecedent name="19" />
+                <antecedent name="20" />
             </antecedents>
-            <consequent name="place_office" />
+            <consequent name="18" />
         </rule>
-        <rule>
+        <rule name="109">
             <antecedents>
-                <antecedent name="place_office" />
+                <antecedent name="16" />
+                <antecedent name="17" />
             </antecedents>
-            <consequent name="working_day" />
+            <consequent name="15" />
         </rule>
-        <rule>
+        <rule name="108">
             <antecedents>
-                <antecedent name="intention_rest" />
+                <antecedent name="18" />
+                <antecedent name="15" />
             </antecedents>
-            <consequent name="use_plain" />
+            <consequent name="14" />
         </rule>
-        <rule>
+        <rule name="110">
             <antecedents>
-                <antecedent name="place_far" />
+                <antecedent name="9" />
+                <antecedent name="18" />
             </antecedents>
-            <consequent name="use_train" />
+            <consequent name="14" />
         </rule>
-        <rule>
+        <rule name="105">
             <antecedents>
-                <antecedent name="use_train" />
+                <antecedent name="7" />
+                <antecedent name="9" />
             </antecedents>
-            <consequent name="buy_ticket" />
+            <consequent name="14" />
         </rule>
-        <rule>
+        <rule name="111">
             <antecedents>
-                <antecedent name="use_plain" />
+                <antecedent name="21" />
             </antecedents>
-            <consequent name="buy_ticket" />
+            <consequent name="9" />
+        </rule>
+        <rule name="106">
+            <antecedents>
+                <antecedent name="4" />
+                <antecedent name="10" />
+                <antecedent name="11" />
+            </antecedents>
+            <consequent name="9" />
+        </rule>
+        <rule name="102">
+            <antecedents>
+                <antecedent name="2" />
+                <antecedent name="3" />
+                <antecedent name="4" />
+            </antecedents>
+            <consequent name="7" />
         </rule>
     </rules>
 </system>
