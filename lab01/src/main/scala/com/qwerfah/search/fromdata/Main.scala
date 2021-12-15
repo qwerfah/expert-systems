@@ -15,14 +15,14 @@ def loop(system: ProductionSystem) =
 
   while initialTerms.isEmpty do
     print("Space separated list of terms for initial state: ")
-    val initial = "intention_rest place_mountains" // scala.io.StdIn.readLine()
-    initialTerms = initial.split(" ").filter(!_.isBlank).map(Term(_))
+    val initial = "1 2 5 6 12 13 10" // scala.io.StdIn.readLine()
+    initialTerms = initial.split(" ").filter(!_.trim.isEmpty).map(Term(_))
     if initialTerms.isEmpty then println("Empty list, try again")
 
   while targetTerms.isEmpty do
     print("Space separated list of terms for final state: ")
-    val target = "use_jeep" // scala.io.StdIn.readLine()
-    targetTerms = target.split(" ").filter(!_.isBlank).map(Term(_))
+    val target = "14" // scala.io.StdIn.readLine()
+    targetTerms = target.split(" ").filter(!_.trim.isEmpty).map(Term(_))
     if targetTerms.isEmpty then println("Empty list, try again")
 
   val searchData = SearchData(State(initialTerms), State(targetTerms))
@@ -42,6 +42,6 @@ def loop(system: ProductionSystem) =
   print(s"\nProduction system xml representation file path [$path]: ")
   val customPath = "" // scala.io.StdIn.readLine()
 
-  Parser(if customPath.isBlank then path else customPath).parse match
+  Parser(if customPath.trim.isEmpty then path else customPath).parse match
     case Success(system) => loop(system)
     case Failure(e)      => println(s"\nUnable to parse xml: ${e.getMessage}\n")

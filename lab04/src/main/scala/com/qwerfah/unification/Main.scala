@@ -1,18 +1,30 @@
 package com.qwerfah.unification
 
-@main def main: Unit =
-  val un1 = SeqUnificator(
-    Substitution(
-      Expression("g(x, y)", FunctionalSymbol("g"), Variable("x"), Variable("y")) -> Variable("z")
-    )
+@main def main(): Unit =
+  /** val t1 = Expression( "P(f(x), y, g(y))", PredicateSymbol("P"), FunctionalSymbol("f"),
+    * Variable("x"), Variable("y"), FunctionalSymbol("g"), Variable("y") ) val t2 = Expression(
+    * "P(f(x), z, g(x))", PredicateSymbol("P"), FunctionalSymbol("f"), Variable("x"), Variable("z"),
+    * FunctionalSymbol("g"), Variable("x") )
+    */
+
+  val t1 = Expression(
+    "P(f(x, g(A, y)), g(A, y))",
+    PredicateSymbol("P"),
+    Expression(
+      "f(x, g(A, y))",
+      FunctionalSymbol("f"),
+      Variable("x"),
+      Expression("g(A, y)", FunctionalSymbol("g"), Constant("A"), Variable("y"))
+    ),
+    Expression("g(A, y)", FunctionalSymbol("g"), Constant("A"), Variable("y"))
+  )
+  val t2 = Expression(
+    "P(f(x, z), z)",
+    PredicateSymbol("P"),
+    Expression("f(x, z)", FunctionalSymbol("f"), Variable("x"), Variable("z")),
+    Variable("z")
   )
 
-  val un2 = SeqUnificator(
-    Substitution(Constant("A") -> Variable("x")),
-    Substitution(Constant("B") -> Variable("y")),
-    Substitution(Constant("C") -> Variable("w")),
-    Substitution(Constant("D") -> Variable("z"))
-  )
-
-  val un = un1 compose un2
-  println(un)
+  Unification.unify(t1, t2) match
+    case Some(unificator) => println(s"Terms can be unified, common unificator is $unificator")
+    case _                => println("Terms can't be unified")
